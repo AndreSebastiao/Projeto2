@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 
 namespace CraftingSim.Model
@@ -31,7 +34,49 @@ namespace CraftingSim.Model
         /// <param name="recipeFiles">Array of file paths</param>
         public void LoadRecipesFromFile(string[] recipeFiles)
         {
-            //TODO Implement Me
+            string s;
+
+            StreamReader sword = new StreamReader("IronSword.txt");
+            while ((s = sword.ReadLine()) != null)
+            {
+                string[] parts = s.Split(',');
+                string name = parts[0];
+                double successRate = double.Parse(parts[1]);
+                Dictionary<IMaterial, int> requiredMaterials =
+                    new Dictionary<IMaterial, int>();
+
+                for (int i = 2; i < parts.Length; i += 2)
+                {
+                    IMaterial material = new Material(parts[i]);
+                    int quantity = int.Parse(parts[i + 1]);
+                    requiredMaterials.Add(material, quantity);
+                }
+
+                IRecipe recipe = new Recipe(name, successRate, requiredMaterials);
+                recipeList.Add(recipe);
+            }
+            sword.Close();
+
+            StreamReader leather = new StreamReader("LeatherBoots.txt");
+            while ((s = leather.ReadLine()) != null)
+            {
+                string[] parts = s.Split(',');
+                string name = parts[0];
+                double successRate = double.Parse(parts[1]);
+                Dictionary<IMaterial, int> requiredMaterials =
+                    new Dictionary<IMaterial, int>();
+
+                for (int i = 2; i < parts.Length; i += 2)
+                {
+                    IMaterial material = new Material(parts[i]);
+                    int quantity = int.Parse(parts[i + 1]);
+                    requiredMaterials.Add(material, quantity);
+                }
+
+                IRecipe recipe = new Recipe(name, successRate, requiredMaterials);
+                recipeList.Add(recipe);
+            }
+            leather.Close();
         }
 
         /// <summary>

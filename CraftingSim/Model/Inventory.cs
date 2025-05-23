@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 
 namespace CraftingSim.Model
 {
@@ -38,7 +39,14 @@ namespace CraftingSim.Model
         /// <param name="quantity">The new amount to set</param>
         public void AddMaterial(IMaterial material, int quantity)
         {
-            //TODO Implement Me
+            if (materials.ContainsKey(material))
+            {
+                materials[material] += quantity;
+            }
+            else
+            {
+                materials.Add(material, quantity);
+            }
         }
 
         /// <summary>
@@ -50,8 +58,18 @@ namespace CraftingSim.Model
         /// <returns>True if removed successfuly, false if not enough material</returns>
         public bool RemoveMaterial(IMaterial material, int quantity)
         {
-            // TODO Implement Me
-            return false;
+            if (materials.ContainsKey(material))
+            {
+                if (materials[material] >= quantity)
+                {
+                    materials[material] -= quantity;
+                    return true;
+                }
+            }
+            else 
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -84,7 +102,17 @@ namespace CraftingSim.Model
         /// <param name="file">Path to the materials file</param>
         public void LoadMaterialsFromFile(string file)
         {
-            //TODO Implement Me
+            string s;
+
+            StreamReader materials = new StreamReader("materials.txt");
+            while ((s = materials.ReadLine()) != null)
+            {
+                string[] parts = s.Split(',');
+                IMaterial material = new Material(parts[0]);
+                int quantity = int.Parse(parts[1]);
+                AddMaterial(material, quantity);
+            }
+            materials.Close();
         }
     }
 }
