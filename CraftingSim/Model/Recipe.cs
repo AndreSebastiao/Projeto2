@@ -24,5 +24,24 @@ namespace CraftingSim.Model
         public double SuccessRate => successRate;
 
         public Dictionary<IMaterial, int> RequiredMaterials => requiredMaterials;
+
+        IReadOnlyDictionary<IMaterial, int> IRecipe.RequiredMaterials => RequiredMaterials;
+
+        public bool CanCraft(Inventory inventory)
+        {
+            foreach (var material in requiredMaterials)
+            {
+                if (inventory.GetQuantity(material.Key) < material.Value)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public int CompareTo(IRecipe other)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

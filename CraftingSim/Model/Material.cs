@@ -21,5 +21,9 @@ namespace CraftingSim.Model
 
         public int Id => id;
 
+        public bool Equals(IMaterial other)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
