@@ -63,6 +63,10 @@ namespace CraftingSim.Model
                 if (materials[material] >= quantity)
                 {
                     materials[material] -= quantity;
+                    if (materials[material] == 0)
+                    {
+                        materials.Remove(material);
+                    }
                     return true;
                 }
             }
